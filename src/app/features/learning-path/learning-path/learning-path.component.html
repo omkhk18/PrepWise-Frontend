@@ -1,0 +1,287 @@
+<div class="learning-path-container">
+  <app-header></app-header>
+
+  <div class="main-content">
+    <!-- Header Section -->
+    <div class="header-section">
+      <h1 class="page-title">Your Personalized Learning Path</h1>
+      @if (learningPathData) {
+      <div class="learning-meta">
+        <div class="duration-badge">
+          {{ getDurationLabel() }}
+        </div>
+        <div class="time-estimate">
+          <span class="time-icon">⏱️</span>
+          <span
+            >{{ getCompletedHours() }}/{{ getTotalEstimatedHours() }} hours
+            completed</span
+          >
+        </div>
+      </div>
+      }
+    </div>
+
+    <!-- Modal: Generate New Learning Path -->
+    @if (showGeneratorModal) {
+    <div
+      class="modal-backdrop"
+      (click)="closeGeneratorModal()"
+      (keydown.escape)="closeGeneratorModal()"
+      tabindex="-1"
+    >
+      <div
+        class="modal"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="generatorTitle"
+        (click)="$event.stopPropagation()"
+      >
+        <div class="modal-header">
+          <h2 id="generatorTitle">Generate New Learning Path</h2>
+          <button
+            class="icon-button"
+            (click)="closeGeneratorModal()"
+            [disabled]="generationLoading"
+            aria-label="Close"
+          >
+            ✕
+          </button>
+        </div>
+
+        <form class="modal-form" (ngSubmit)="generateNewPath()" novalidate>
+          <div class="field">
+            <label for="skill">Skill</label>
+            <input
+              id="skill"
+              type="text"
+              [(ngModel)]="newSkill"
+              name="skill"
+              placeholder="e.g., Python"
+              required
+              autofocus
+            />
+          </div>
+
+          <div class="field">
+            <label for="level">Level</label>
+            <select id="level" [(ngModel)]="newLevel" name="level" required>
+              <option value="" disabled>Select level</option>
+              <option>Beginner</option>
+              <option>Intermediate</option>
+              <option>Advanced</option>
+            </select>
+          </div>
+
+          <div class="modal-actions">
+            <button
+              type="button"
+              class="btn-secondary"
+              (click)="closeGeneratorModal()"
+              [disabled]="generationLoading"
+            >
+              Cancel
+            </button>
+            <button
+              type="submit"
+              class="cta-button"
+              [disabled]="generationLoading || !newSkill || !newLevel"
+            >
+              {{ generationLoading ? "Generating..." : "Generate" }}
+            </button>
+          </div>
+
+          @if (!generationLoading && generationError) {
+          <div class="state error">Error: {{ generationError }}</div>
+          }
+        </form>
+      </div>
+    </div>
+    }
+
+    <!-- Overall Progress Section -->
+    @if (learningPathData) {
+    <div class="progress-overview">
+      <div class="progress-header">
+        <h2 class="progress-title">Overall Progress</h2>
+        <span class="progress-percentage"
+          >{{ overallProgress.toFixed(1) }}%</span
+        >
+      </div>
+
+      <div class="progress-bar-container">
+        <div class="progress-bar">
+          <div class="progress-fill" [style.width.%]="overallProgress"></div>
+        </div>
+      </div>
+
+      <div class="progress-stats">
+        <div class="stat-item">
+          <span class="stat-label">Periods:</span>
+          <span class="stat-value">{{
+            learningPathData.learningPath.length
+          }}</span>
+        </div>
+        <div class="stat-divider"></div>
+        <div class="stat-item">
+          <span class="stat-label">Total Tasks:</span>
+          <span class="stat-value">
+            {{ getTotalTasksCount() }}
+          </span>
+        </div>
+        <div class="stat-divider"></div>
+        <div class="stat-item">
+          <span class="stat-label">Completed:</span>
+          <span class="stat-value">
+            {{ getCompletedTasksCount() }}
+          </span>
+        </div>
+      </div>
+    </div>
+    }
+
+    <!-- Learning Path Periods -->
+    @if (learningPathData) {
+    <div class="periods-container">
+      <div
+        class="period-card"
+        *ngFor="let period of learningPathData.learningPath; let i = index"
+        [class.expanded]="isPeriodExpanded(i)"
+      >
+        <!-- Period Header -->
+        <div class="period-header" (click)="togglePeriod(i)">
+          <div class="period-header-content">
+            <div class="period-info">
+              <h3 class="period-title">{{ period.period }}</h3>
+              <p class="period-goal">{{ period.goal }}</p>
+            </div>
+
+            <div class="period-stats">
+              <div class="period-progress">
+                <div class="mini-progress-bar">
+                  <div
+                    class="mini-progress-fill"
+                    [style.width.%]="periodProgress[i]"
+                  ></div>
+                </div>
+                <span class="mini-progress-text"
+                  >{{ periodProgress[i].toFixed(0) }}%</span
+                >
+              </div>
+
+              <div class="expand-icon" [class.rotated]="isPeriodExpanded(i)">
+                <svg viewBox="0 0 24 24" width="20" height="20">
+                  <path d="M7 10l5 5 5-5H7z" fill="currentColor" />
+                </svg>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Period Content -->
+        <div class="period-content" [class.expanded]="isPeriodExpanded(i)">
+          <div class="period-content-inner">
+            <!-- Focus Areas -->
+            <div class="section focus-areas-section">
+              <h4 class="section-title">
+                <span class="section-icon">🎯</span>
+                Focus Areas
+              </h4>
+              <ul class="focus-areas-list">
+                <li
+                  class="focus-area-item"
+                  *ngFor="let area of period.focusAreas"
+                >
+                  {{ area }}
+                </li>
+              </ul>
+            </div>
+
+            <!-- Resources -->
+            <div class="section resources-section">
+              <h4 class="section-title">
+                <span class="section-icon">📚</span>
+                Resources
+              </h4>
+              <div class="resources-grid">
+                <a
+                  *ngFor="let resource of period.resources"
+                  [href]="resource.url"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="resource-item"
+                >
+                  <span class="resource-icon">{{
+                    getResourceIcon(resource.type)
+                  }}</span>
+                  <div class="resource-content">
+                    <span class="resource-title">{{ resource.title }}</span>
+                    <span class="resource-type">{{ resource.type }}</span>
+                  </div>
+                  <span class="external-link-icon">↗</span>
+                </a>
+              </div>
+            </div>
+
+            <!-- Tasks -->
+            <div class="section tasks-section">
+              <h4 class="section-title">
+                <span class="section-icon">✅</span>
+                Tasks & Milestones
+              </h4>
+              <div class="tasks-list">
+                <div
+                  class="task-item"
+                  *ngFor="let task of period.tasks; let taskIndex = index"
+                  [class.completed]="task.completed"
+                >
+                  <label class="task-checkbox-label">
+                    <input
+                      type="checkbox"
+                      class="task-checkbox"
+                      [checked]="task.completed"
+                      (change)="toggleTask(i, taskIndex)"
+                    />
+                    <span class="checkbox-custom"></span>
+                  </label>
+
+                  <div class="task-content">
+                    <p
+                      class="task-description"
+                      [class.completed]="task.completed"
+                    >
+                      {{ task.description }}
+                    </p>
+                    <div class="task-meta">
+                      <span class="estimated-time">
+                        <span class="time-icon">⏱️</span>
+                        {{ task.estimatedHours }}h
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    }
+
+    <!-- Empty State -->
+    @if (!learningPathData) {
+    <div class="empty-state">
+      <div class="empty-state-content">
+        <div class="empty-state-icon">📚</div>
+        <h3 class="empty-state-title">No Learning Path Found</h3>
+        <p class="empty-state-description">
+          Create a personalized learning path.
+        </p>
+        <button class="cta-button generate-btn" (click)="openGeneratorModal()">
+          Generate New Learning Path
+        </button>
+      </div>
+    </div>
+    }
+  </div>
+</div>
+<app-footer></app-footer>

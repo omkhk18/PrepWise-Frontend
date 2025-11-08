@@ -1,0 +1,313 @@
+<div
+  class="min-h-screen flex flex-col relative bg-gradient-to-br from-[#F8F9FA] to-[#E9ECEF] auth-section"
+>
+  <!-- Background decorations matching resume analyzer -->
+  <div class="absolute inset-0 overflow-hidden z-0">
+    <div
+      class="absolute top-1/4 -left-40 w-72 md:w-96 h-72 md:h-96 bg-[#3498DB]/10 rounded-full blur-[100px]"
+    ></div>
+    <div
+      class="absolute bottom-1/3 -right-40 w-72 md:w-96 h-72 md:h-96 bg-[#6C5CE7]/10 rounded-full blur-[100px]"
+    ></div>
+    <div
+      class="absolute -bottom-20 left-1/4 w-48 md:w-64 h-48 md:h-64 bg-[#3498DB]/8 rounded-full blur-[80px]"
+    ></div>
+  </div>
+
+  <!-- Back Button -->
+  <div class="absolute top-6 left-6 z-20">
+    <a
+      routerLink="/"
+      class="flex items-center text-[#2C3E50] hover:text-[#3498DB] transition-colors font-medium"
+    >
+      <svg
+        class="h-5 w-5 mr-1"
+        xmlns="http://www.w3.org/2000/svg"
+        fill="none"
+        viewBox="0 0 24 24"
+        stroke="currentColor"
+      >
+        <path
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="2"
+          d="M15 19l-7-7 7-7"
+        />
+      </svg>
+      Back
+    </a>
+  </div>
+
+  <div
+    class="flex flex-col items-center justify-center flex-grow p-4 relative z-10"
+  >
+    <!-- Main Card -->
+    <div class="auth-card w-full max-w-md relative">
+      <!-- Glass morphism card matching resume analyzer -->
+      <div class="relative group">
+        <div
+          class="absolute -inset-1 bg-gradient-to-br from-[#3498DB]/20 to-[#6C5CE7]/20 rounded-2xl blur-xl opacity-50"
+        ></div>
+        <div
+          class="relative bg-white/90 backdrop-blur-xl rounded-2xl p-6 md:p-8 border border-[#3498DB]/20 hover:border-[#3498DB]/40 shadow-lg transition-colors duration-300"
+        >
+          <!-- Header -->
+          <div class="text-center mb-8">
+            <div
+              class="inline-flex items-center gap-2 bg-gradient-to-r from-[#3498DB]/10 to-[#6C5CE7]/10 border border-[#3498DB]/30 rounded-full px-4 py-2 mb-4"
+            >
+              <span class="w-2 h-2 bg-[#3498DB] rounded-full"></span>
+              <span class="text-[#3498DB] text-sm font-medium"
+                >Welcome Back</span
+              >
+            </div>
+
+            <h1
+              class="text-3xl sm:text-4xl font-bold mb-4 text-[#2C3E50] leading-tight"
+            >
+              <span
+                class="bg-clip-text text-transparent bg-gradient-to-r from-[#3498DB] via-[#6C5CE7] to-[#8B5CF6] animate-gradient"
+                >Sign In</span
+              >
+            </h1>
+            <p class="text-lg text-[#6C757D] leading-relaxed">
+              Sign in to your account to continue your journey
+            </p>
+          </div>
+
+          <!-- Form Content -->
+          <div class="space-y-6">
+            <!-- Error Message -->
+            <div
+              class="bg-gradient-to-r from-[#E74C3C]/10 to-[#C0392B]/10 border border-[#E74C3C]/30 text-[#E74C3C] p-3 md:p-4 rounded-xl flex items-center gap-3"
+              [style.display]="showError ? 'flex' : 'none'"
+              id="error-message"
+            >
+              <span class="text-xl">⚠️</span>
+              <span class="text-sm md:text-base flex-1">{{
+                generalError
+              }}</span>
+              <button
+                type="button"
+                (click)="hideError()"
+                class="text-[#E74C3C] hover:text-[#C0392B] transition-colors"
+              >
+                <span class="text-lg">×</span>
+              </button>
+            </div>
+
+            <!-- Rate Limiting Warning -->
+            @if (isBlocked) {
+            <div
+              class="bg-gradient-to-r from-[#F39C12]/10 to-[#E67E22]/10 border border-[#F39C12]/30 text-[#F39C12] p-3 md:p-4 rounded-xl flex items-center gap-3"
+            >
+              <span class="text-xl">🚫</span>
+              <div class="flex-1">
+                <p class="font-medium">Account Temporarily Blocked</p>
+                <p class="mt-1">
+                  Too many failed attempts. Please try again in
+                  {{ getBlockTimeRemaining() }}.
+                </p>
+              </div>
+            </div>
+            }
+
+            <form (ngSubmit)="handleSubmit($event)" class="space-y-6">
+              <!-- Username or Email Field -->
+              <div class="space-y-2">
+                <label
+                  for="usernameOrEmail"
+                  class="block text-sm font-semibold text-[#2C3E50]"
+                >
+                  Username or Email @if (touchedFields['usernameOrEmail'] &&
+                  !hasFieldError('usernameOrEmail')) {
+                  <span class="ml-1 text-[#27AE60]">✓</span>
+                  }
+                </label>
+                <div class="relative">
+                  <input
+                    id="usernameOrEmail"
+                    type="text"
+                    placeholder="Enter username or email"
+                    required
+                    [(ngModel)]="usernameOrEmail"
+                    name="usernameOrEmail"
+                    [disabled]="isLoading || isBlocked"
+                    (blur)="markFieldAsTouched('usernameOrEmail')"
+                    (input)="validateField('usernameOrEmail')"
+                    [class]="
+                      'w-full px-4 py-3 pl-12 bg-[#F8F9FA] border rounded-xl text-[#2C3E50] placeholder-[#6C757D] transition-all duration-300 focus:outline-none ' +
+                      (hasFieldError('usernameOrEmail')
+                        ? 'border-[#E74C3C] focus:border-[#E74C3C] focus:ring-4 focus:ring-[#E74C3C]/20'
+                        : touchedFields['usernameOrEmail'] &&
+                          !hasFieldError('usernameOrEmail')
+                        ? 'border-[#27AE60] focus:border-[#27AE60] focus:ring-4 focus:ring-[#27AE60]/20'
+                        : 'border-[#3498DB]/20 hover:border-[#3498DB]/40 focus:border-[#3498DB] focus:ring-4 focus:ring-[#3498DB]/20')
+                    "
+                  />
+                  <span
+                    class="absolute left-4 top-1/2 transform -translate-y-1/2 text-[#6C757D]"
+                    >👤</span
+                  >
+                  @if (isLoading) {
+                  <div
+                    class="absolute right-4 top-1/2 transform -translate-y-1/2"
+                  >
+                    <div
+                      class="w-4 h-4 border-2 border-[#3498DB] border-t-transparent rounded-full animate-spin"
+                    ></div>
+                  </div>
+                  }
+                </div>
+                <div
+                  class="error-message min-h-[20px]"
+                  [style.display]="
+                    hasFieldError('usernameOrEmail') ? 'block' : 'none'
+                  "
+                >
+                  <span class="text-[#E74C3C] text-xs flex items-center gap-1">
+                    <span>⚠️</span>
+                    {{ getFieldError("usernameOrEmail") }}
+                  </span>
+                </div>
+              </div>
+
+              <!-- Password Field -->
+              <div class="space-y-2">
+                <label
+                  for="password"
+                  class="block text-sm font-semibold text-[#2C3E50]"
+                >
+                  Password @if (touchedFields['password'] &&
+                  !hasFieldError('password')) {
+                  <span class="ml-1 text-[#27AE60]">✓</span>
+                  }
+                </label>
+                <div class="relative">
+                  <input
+                    id="password"
+                    [type]="showPassword ? 'text' : 'password'"
+                    placeholder="••••••••"
+                    required
+                    [(ngModel)]="password"
+                    name="password"
+                    [disabled]="isLoading || isBlocked"
+                    (blur)="markFieldAsTouched('password')"
+                    (input)="validateField('password')"
+                    [class]="
+                      'w-full px-4 py-3 pl-12 pr-12 bg-[#F8F9FA] border rounded-xl text-[#2C3E50] placeholder-[#6C757D] transition-all duration-300 focus:outline-none ' +
+                      (hasFieldError('password')
+                        ? 'border-[#E74C3C] focus:border-[#E74C3C] focus:ring-4 focus:ring-[#E74C3C]/20'
+                        : touchedFields['password'] &&
+                          !hasFieldError('password')
+                        ? 'border-[#27AE60] focus:border-[#27AE60] focus:ring-4 focus:ring-[#27AE60]/20'
+                        : 'border-[#3498DB]/20 hover:border-[#3498DB]/40 focus:border-[#3498DB] focus:ring-4 focus:ring-[#3498DB]/20')
+                    "
+                  />
+                  <span
+                    class="absolute left-4 top-1/2 transform -translate-y-1/2 text-[#6C757D]"
+                    >🔒</span
+                  >
+                  <button
+                    type="button"
+                    (click)="togglePasswordVisibility()"
+                    class="absolute right-4 top-1/2 transform -translate-y-1/2 text-[#6C757D] hover:text-[#2C3E50] transition-colors"
+                    [disabled]="isLoading || isBlocked"
+                  >
+                    <span class="text-lg">{{
+                      showPassword ? "🙈" : "👁️"
+                    }}</span>
+                  </button>
+                </div>
+                <div
+                  class="error-message min-h-[20px]"
+                  [style.display]="hasFieldError('password') ? 'block' : 'none'"
+                >
+                  <span class="text-[#E74C3C] text-xs flex items-center gap-1">
+                    <span>⚠️</span>
+                    {{ getFieldError("password") }}
+                  </span>
+                </div>
+              </div>
+
+              <!-- Remember Me & Forgot Password -->
+              <div class="flex items-center justify-between">
+                <div class="flex items-center space-x-2">
+                  <input
+                    type="checkbox"
+                    id="remember"
+                    [(ngModel)]="rememberMe"
+                    name="remember"
+                    [disabled]="isLoading || isBlocked"
+                    class="w-4 h-4 rounded border border-[#3498DB]/30 bg-[#F8F9FA] text-[#3498DB] focus:ring-[#3498DB]/20 focus:ring-2 transition-all disabled:opacity-50"
+                  />
+                  <label for="remember" class="text-sm text-[#6C757D]">
+                    Remember me
+                  </label>
+                </div>
+                <a
+                  href="#"
+                  class="text-sm text-[#3498DB] hover:text-[#6C5CE7] hover:underline transition-colors font-medium"
+                >
+                  Forgot password?
+                </a>
+              </div>
+
+              <!-- Submit Button -->
+              <button
+                type="submit"
+                [disabled]="isLoading || isBlocked || !isFormValid"
+                class="w-full bg-gradient-to-r from-[#3498DB] to-[#6C5CE7] hover:from-[#2980B9] hover:to-[#5A4FCF] text-white py-3 px-6 rounded-xl font-semibold transition-all duration-300 hover:shadow-2xl hover:shadow-[#3498DB]/25 disabled:opacity-50 disabled:cursor-not-allowed transform hover:scale-105 disabled:hover:scale-100"
+              >
+                <span class="flex items-center justify-center gap-2">
+                  @if (isLoading) {
+                  <span class="animate-spin">⏳</span>
+                  } @if (isBlocked) {
+                  <span></span>
+                  } @if (!isLoading && !isBlocked) {
+                  <span></span>
+                  }
+                  {{
+                    isLoading
+                      ? "Signing in..."
+                      : isBlocked
+                      ? "Account Blocked"
+                      : "Sign In"
+                  }}
+                </span>
+              </button>
+            </form>
+          </div>
+
+          <!-- Footer -->
+          <div class="text-center mt-8 pt-6 border-t border-[#3498DB]/20">
+            <a
+              routerLink="/sign-up"
+              class="text-sm text-[#3498DB] hover:text-[#6C5CE7] hover:underline font-medium transition-colors"
+            >
+              Don't have an account? Sign up
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Bottom Decorative Section -->
+    <div class="mt-8 text-center">
+      <div class="flex items-center justify-center space-x-2 mb-3">
+        <div
+          class="w-8 h-1 bg-gradient-to-r from-[#3498DB]/30 to-[#6C5CE7]/30 rounded-full"
+        ></div>
+        <div
+          class="w-2 h-2 bg-gradient-to-r from-[#3498DB] to-[#6C5CE7] rounded-full"
+        ></div>
+        <div
+          class="w-8 h-1 bg-gradient-to-r from-[#6C5CE7]/30 to-[#3498DB]/30 rounded-full"
+        ></div>
+      </div>
+      <p class="text-sm text-[#6C757D]">
+        Build and manage your professional resume
+      </p>
+    </div>
+  </div>
+</div>

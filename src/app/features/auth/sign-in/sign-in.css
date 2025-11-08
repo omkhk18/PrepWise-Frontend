@@ -1,0 +1,390 @@
+/* Auth Section Styles */
+.auth-section {
+  background: #0d0d0d;
+  min-height: 100vh;
+  position: relative;
+}
+
+/* Card Styles */
+.auth-card {
+  position: relative;
+  perspective: 1000px;
+}
+
+.card-border-glow {
+  position: relative;
+}
+
+.card-border-glow::before {
+  content: "";
+  position: absolute;
+  inset: -1px;
+  padding: 1px;
+  background: linear-gradient(
+    135deg,
+    rgba(127, 0, 255, 0.4),
+    rgba(196, 0, 255, 0.4)
+  );
+  border-radius: 12px;
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: exclude;
+  mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  mask-composite: exclude;
+}
+
+/* Input Styles */
+.input-glow {
+  transition: all 0.3s ease;
+}
+
+.input-glow:focus {
+  box-shadow: 0 0 20px rgba(176, 62, 255, 0.3);
+  transform: translateY(-1px);
+}
+
+.input-glow:hover {
+  border-color: rgba(176, 62, 255, 0.5);
+}
+
+/* Button Styles */
+.gradient-button {
+  position: relative;
+  overflow: hidden;
+  background: linear-gradient(90deg, #7f00ff 0%, #c400ff 100%);
+  transition: all 0.3s ease;
+}
+
+.gradient-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 30px rgba(176, 62, 255, 0.4);
+}
+
+.gradient-button:active {
+  transform: translateY(0);
+}
+
+.gradient-button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
+/* Card Decoration */
+.card-decoration {
+  animation: pulse-glow 2s ease-in-out infinite alternate;
+}
+
+@keyframes pulse-glow {
+  0% {
+    opacity: 0.7;
+    transform: scaleX(1);
+  }
+  100% {
+    opacity: 1;
+    transform: scaleX(1.1);
+  }
+}
+
+/* Hover Effects */
+.auth-card:hover .card-border-glow::before {
+  background: linear-gradient(
+    135deg,
+    rgba(127, 0, 255, 0.6),
+    rgba(196, 0, 255, 0.6)
+  );
+}
+
+/* Form Field Focus Effects */
+input:focus + label,
+input:not(:placeholder-shown) + label {
+  color: #b03eff;
+}
+
+/* Checkbox Styles */
+input[type="checkbox"] {
+  appearance: none;
+  background-color: #1a1a1a;
+  border: 1px solid rgba(176, 62, 255, 0.3);
+  border-radius: 4px;
+  width: 16px;
+  height: 16px;
+  position: relative;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+input[type="checkbox"]:checked {
+  background-color: #b03eff;
+  border-color: #b03eff;
+}
+
+input[type="checkbox"]:checked::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  width: 8px;
+  height: 8px;
+  background: white;
+  border-radius: 2px;
+}
+
+input[type="checkbox"]:focus {
+  outline: 2px solid rgba(176, 62, 255, 0.3);
+  outline-offset: 2px;
+}
+
+/* Link Hover Effects */
+a {
+  transition: all 0.3s ease;
+}
+
+a:hover {
+  text-shadow: 0 0 8px rgba(176, 62, 255, 0.5);
+}
+
+/* Error Message Animation */
+#error-message {
+  animation: slideIn 0.3s ease-out;
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Enhanced Loading States */
+.loading-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(13, 13, 13, 0.8);
+  backdrop-filter: blur(2px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 50;
+  border-radius: 12px;
+}
+
+/* Enhanced Error Message */
+.error-message {
+  transition: all 0.3s ease;
+  min-height: 20px;
+}
+
+.error-message.show {
+  animation: slideInError 0.3s ease-out;
+}
+
+@keyframes slideInError {
+  from {
+    opacity: 0;
+    transform: translateY(-5px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Success State */
+.input-success {
+  border-color: #10b981 !important;
+  box-shadow: 0 0 0 1px #10b981;
+}
+
+.input-success:focus {
+  border-color: #10b981 !important;
+  box-shadow: 0 0 20px rgba(16, 185, 129, 0.3);
+}
+
+/* Rate Limiting Warning */
+.rate-limit-warning {
+  background: linear-gradient(
+    90deg,
+    rgba(245, 158, 11, 0.1),
+    rgba(217, 119, 6, 0.1)
+  );
+  border: 1px solid rgba(245, 158, 11, 0.3);
+  animation: pulse 2s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.8;
+  }
+}
+
+/* Enhanced Button States */
+.gradient-button:not(:disabled):hover {
+  transform: translateY(-1px);
+  box-shadow: 0 8px 25px rgba(176, 62, 255, 0.3);
+}
+
+/* Password Toggle Button */
+.password-toggle {
+  transition: all 0.2s ease;
+}
+
+.password-toggle:hover {
+  color: #f1f1f1;
+  transform: scale(1.1);
+}
+
+/* Input with Icon */
+.input-with-icon {
+  padding-left: 2.5rem;
+}
+
+.input-icon {
+  position: absolute;
+  left: 0.75rem;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #a7a7a7;
+  transition: color 0.2s ease;
+}
+
+.input-glow:focus + .input-icon {
+  color: #b03eff;
+}
+
+/* Form Field Loading State */
+.input-loading {
+  position: relative;
+}
+
+.input-loading::after {
+  content: "";
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 16px;
+  height: 16px;
+  border: 2px solid #b03eff;
+  border-top-color: transparent;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+/* Loading Spinner */
+@keyframes spin {
+  to {
+    transform: translateY(-50%) rotate(360deg);
+  }
+}
+
+/* Enhanced Focus States */
+.input-glow:focus-within {
+  box-shadow: 0 0 20px rgba(176, 62, 255, 0.3);
+  transform: translateY(-1px);
+}
+
+/* Validation States */
+.field-valid {
+  border-color: #10b981;
+}
+
+.field-invalid {
+  border-color: #ef4444;
+  animation: shake 0.3s ease-in-out;
+}
+
+@keyframes shake {
+  0%,
+  100% {
+    transform: translateX(0);
+  }
+  25% {
+    transform: translateX(-5px);
+  }
+  75% {
+    transform: translateX(5px);
+  }
+}
+
+/* Blocked State */
+.blocked-button {
+  background: linear-gradient(90deg, #6b7280, #4b5563);
+  cursor: not-allowed;
+}
+
+.blocked-button:hover {
+  transform: none;
+  box-shadow: none;
+}
+
+/* Mobile Optimizations */
+@media (max-width: 640px) {
+  .auth-card {
+    margin: 0.5rem;
+  }
+
+  .input-with-icon {
+    padding-left: 2.5rem;
+  }
+}
+
+/* Remember Me Checkbox Enhancement */
+input[type="checkbox"]:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* Forgot Password Link */
+.forgot-password {
+  position: relative;
+  overflow: hidden;
+}
+
+.forgot-password::before {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 0;
+  height: 1px;
+  background: linear-gradient(90deg, #b03eff, #c400ff);
+  transition: width 0.3s ease;
+}
+
+.forgot-password:hover::before {
+  width: 100%;
+}
+
+/* Form Group Spacing */
+.space-y-5 > * + * {
+  margin-top: 1.25rem;
+}
+
+.space-y-2 > * + * {
+  margin-top: 0.5rem;
+}
+
+/* Text Selection */
+::selection {
+  background-color: rgba(176, 62, 255, 0.3);
+  color: #f1f1f1;
+}
+
+/* Smooth Transitions */
+* {
+  transition-property: color, background-color, border-color,
+    text-decoration-color, fill, stroke, opacity, box-shadow, transform, filter,
+    backdrop-filter;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  transition-duration: 150ms;
+}

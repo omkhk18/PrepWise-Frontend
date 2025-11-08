@@ -1,0 +1,188 @@
+<section
+  class="pt-24 relative min-h-screen flex items-center justify-center overflow-hidden bg-gradient-to-br from-[#F8F9FA] via-[#E9ECEF] to-[#DEE2E6]"
+>
+  <!-- Background decorations -->
+  <div class="absolute inset-0 overflow-hidden">
+    <div
+      class="absolute top-20 left-10 w-32 md:w-48 h-32 md:h-48 bg-[#3498DB]/10 rounded-full blur-[60px] animate-pulse"
+    ></div>
+    <div
+      class="absolute top-40 right-20 w-24 md:w-36 h-24 md:h-36 bg-[#6C5CE7]/8 rounded-full blur-[50px] animate-pulse delay-1000"
+    ></div>
+    <div
+      class="absolute bottom-32 left-1/4 w-40 md:w-56 h-40 md:h-56 bg-[#3498DB]/8 rounded-full blur-[70px] animate-pulse delay-2000"
+    ></div>
+    <div
+      class="absolute bottom-20 right-10 w-28 md:w-40 h-28 md:h-40 bg-[#6C5CE7]/10 rounded-full blur-[55px] animate-pulse delay-3000"
+    ></div>
+  </div>
+
+  <div class="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+    <div class="text-center max-w-5xl mx-auto">
+      <!-- Badge -->
+      <div
+        class="inline-flex items-center gap-2 bg-gradient-to-r from-[#3498DB]/10 to-[#6C5CE7]/10 border border-[#3498DB]/30 rounded-full px-4 py-2 backdrop-blur-sm"
+      >
+        <div class="w-2 h-2 bg-[#3498DB] rounded-full animate-pulse"></div>
+        <span class="text-[#3498DB] text-sm font-medium"
+          >AI-Powered Career Success</span
+        >
+      </div>
+
+      <!-- Main Headline -->
+      <h1 class="text-4xl md:text-6xl lg:text-7xl font-bold mb-8 leading-tight">
+        <span class="text-[#2C3E50]">Master Your</span>
+        <br />
+        <span
+          class="bg-clip-text text-transparent bg-gradient-to-r from-[#3498DB] via-[#6C5CE7] to-[#8B5CF6] animate-gradient"
+        >
+          Interview Journey
+        </span>
+      </h1>
+
+      <!-- Subtitle -->
+      <p
+        class="text-xl md:text-2xl text-[#6C757D] mb-12 max-w-3xl mx-auto leading-relaxed"
+      >
+        Transform your career with AI-powered resume analysis, personalized
+        learning paths, and realistic mock interviews designed to boost your
+        confidence.
+      </p>
+
+      <!-- CTA Buttons with Authentication Check -->
+      <div
+        class="flex flex-col sm:flex-row gap-4 justify-center items-center mb-16"
+      >
+        <!-- Primary CTA - Changes based on authentication -->
+        @if (isAuthenticated) {
+        <a
+          href="/dashboard"
+          class="group bg-gradient-to-r from-[#3498DB] to-[#6C5CE7] hover:from-[#2980B9] hover:to-[#5A4FCF] text-white px-8 py-4 rounded-xl font-semibold text-lg transition-all duration-300 shadow-lg hover:shadow-2xl hover:shadow-[#3498DB]/25 hover:scale-105 inline-flex items-center gap-3"
+        >
+          <span>Go to Dashboard</span>
+          <svg
+            class="w-5 h-5 group-hover:translate-x-1 transition-transform"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M17 8l4 4m0 0l-4 4m4-4H3"
+            />
+          </svg>
+        </a>
+        } @else {
+        <a
+          href="/mock-interview"
+          class="group bg-gradient-to-r from-[#3498DB] to-[#6C5CE7] hover:from-[#2980B9] hover:to-[#5A4FCF] text-white px-8 py-4 rounded-xl font-semibold text-lg transition-all duration-300 shadow-lg hover:shadow-2xl hover:shadow-[#3498DB]/25 hover:scale-105 inline-flex items-center gap-3"
+        >
+          <span>Start Your Journey</span>
+          <svg
+            class="w-5 h-5 group-hover:translate-x-1 transition-transform"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M17 8l4 4m0 0l-4 4m4-4H3"
+            />
+          </svg>
+        </a>
+        }
+
+        <!-- Secondary CTA - Resume Analyzer (always available) -->
+        <a
+          href="/resume-analyzer"
+          class="group bg-white/80 backdrop-blur-sm hover:bg-[#F8F9FA] border-2 border-[#3498DB]/30 hover:border-[#3498DB]/50 text-[#2C3E50] px-8 py-4 rounded-xl font-semibold text-lg transition-all duration-300 shadow-lg hover:shadow-xl inline-flex items-center gap-3"
+        >
+          <svg
+            class="w-5 h-5 text-[#3498DB]"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
+            />
+          </svg>
+          <span>Try Resume Analyzer</span>
+        </a>
+      </div>
+
+      <!-- Feature highlights -->
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-4xl mx-auto">
+        <div class="flex items-center justify-center gap-3 text-[#6C757D]">
+          <div
+            class="w-10 h-10 bg-gradient-to-r from-[#3498DB]/10 to-[#6C5CE7]/10 rounded-full flex items-center justify-center"
+          >
+            <svg
+              class="w-5 h-5 text-[#3498DB]"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M13 10V3L4 14h7v7l9-11h-7z"
+              />
+            </svg>
+          </div>
+          <span class="font-medium">AI-Powered Analysis</span>
+        </div>
+
+        <div class="flex items-center justify-center gap-3 text-[#6C757D]">
+          <div
+            class="w-10 h-10 bg-gradient-to-r from-[#3498DB]/10 to-[#6C5CE7]/10 rounded-full flex items-center justify-center"
+          >
+            <svg
+              class="w-5 h-5 text-[#3498DB]"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"
+              />
+            </svg>
+          </div>
+          <span class="font-medium">Personalized Learning</span>
+        </div>
+
+        <div class="flex items-center justify-center gap-3 text-[#6C757D]">
+          <div
+            class="w-10 h-10 bg-gradient-to-r from-[#3498DB]/10 to-[#6C5CE7]/10 rounded-full flex items-center justify-center"
+          >
+            <svg
+              class="w-5 h-5 text-[#3498DB]"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"
+              />
+            </svg>
+          </div>
+          <span class="font-medium">Mock Interviews</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

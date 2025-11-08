@@ -1,0 +1,654 @@
+<div
+  class="dashboard-container bg-gradient-to-br from-[#F8F9FA] to-[#E9ECEF] min-h-screen"
+>
+  <app-header></app-header>
+
+  <!-- Background decorations matching resume analyzer -->
+  <div class="absolute inset-0 overflow-hidden z-0">
+    <div
+      class="absolute top-1/4 -left-40 w-72 md:w-96 h-72 md:h-96 bg-[#3498DB]/10 rounded-full blur-[100px]"
+    ></div>
+    <div
+      class="absolute bottom-1/3 -right-40 w-72 md:w-96 h-72 md:h-96 bg-[#6C5CE7]/10 rounded-full blur-[100px]"
+    ></div>
+    <div
+      class="absolute -bottom-20 left-1/4 w-48 md:w-64 h-48 md:h-64 bg-[#3498DB]/8 rounded-full blur-[80px]"
+    ></div>
+  </div>
+
+  <div class="container mx-auto px-4 sm:px-6 relative z-10 max-w-7xl pt-8">
+    <!-- Resume Analysis Result Notification -->
+    @if (showAnalysisNotification) {
+    <div class="analysis-notification-container mb-8">
+      <div class="relative group">
+        <div
+          class="absolute -inset-1 bg-gradient-to-br from-[#3498DB]/20 to-[#6C5CE7]/20 rounded-2xl blur-xl opacity-50"
+        ></div>
+        <div
+          class="relative bg-white/90 backdrop-blur-xl rounded-2xl p-6 md:p-8 border border-[#3498DB]/20 hover:border-[#3498DB]/40 shadow-lg"
+        >
+          <div class="flex items-start justify-between">
+            <div class="flex items-center mb-4">
+              <div
+                class="w-12 h-12 bg-gradient-to-r from-[#3498DB] to-[#6C5CE7] rounded-full flex items-center justify-center mr-4 shadow-lg"
+              >
+                <span class="text-white text-xl">✓</span>
+              </div>
+              <div>
+                <h3 class="text-xl font-bold text-[#2C3E50] mb-1">
+                  Resume Analysis Complete!
+                </h3>
+                <p class="text-[#6C757D]">
+                  Your profile has been updated with the analysis results
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    }
+
+    <!-- Profile Section -->
+    <div class="profile-container mb-8">
+      <div class="relative group">
+        <div
+          class="absolute -inset-1 bg-gradient-to-br from-[#3498DB]/20 to-[#6C5CE7]/20 rounded-2xl blur-xl opacity-50"
+        ></div>
+        <div
+          class="relative bg-white/90 backdrop-blur-xl rounded-2xl p-6 md:p-8 border border-[#3498DB]/20 hover:border-[#3498DB]/40 shadow-lg"
+        >
+          <div class="profile-header">
+            <!-- Profile Photo Section -->
+            <div class="profile-photo-section">
+              <div class="relative">
+                <div
+                  class="absolute -inset-1 bg-gradient-to-r from-[#3498DB] to-[#6C5CE7] rounded-full blur opacity-50"
+                ></div>
+                <p-avatar
+                  [image]="profile.photo || 'https://via.placeholder.com/150'"
+                  size="xlarge"
+                  shape="circle"
+                  class="relative profile-photo border-4 border-white shadow-2xl"
+                  [style]="{
+                    width: '120px',
+                    height: '120px',
+                    'object-fit': 'cover'
+                  }"
+                  imageAriaLabel="Profile photo"
+                >
+                </p-avatar>
+              </div>
+              <div class="profile-info">
+                <div class="name-section">
+                  @if (!isProfileEditing) {
+                  <h1
+                    class="profile-name text-3xl font-bold text-[#2C3E50] mb-2"
+                  >
+                    {{ profile.name || "Loading..." }}
+                  </h1>
+                  } @if (isProfileEditing) {
+                  <input
+                    pInputText
+                    [(ngModel)]="profile.name"
+                    class="edit-input profile-name-input text-3xl font-bold bg-white/80 border border-[#3498DB]/20 rounded-xl text-[#2C3E50] p-3"
+                    placeholder="Enter your name"
+                  />
+                  }
+                </div>
+
+                <div class="email-section mb-2">
+                  @if (!isProfileEditing) {
+                  <p class="profile-email text-lg text-[#6C757D]">
+                    {{ profile.email || "Loading..." }}
+                  </p>
+                  } @if (isProfileEditing) {
+                  <input
+                    pInputText
+                    [(ngModel)]="profile.email"
+                    class="edit-input bg-white/80 border border-[#3498DB]/20 rounded-xl text-[#2C3E50] p-3"
+                    placeholder="Enter your email"
+                  />
+                  }
+                </div>
+
+                <div class="location-section">
+                  @if (!isProfileEditing) {
+                  <p
+                    class="profile-location text-[#6C757D] flex items-center gap-2"
+                  >
+                    <span class="text-[#3498DB]">📍</span>
+                    {{ profile.location || "Loading..." }}
+                  </p>
+                  } @if (isProfileEditing) {
+                  <input
+                    pInputText
+                    [(ngModel)]="profile.location"
+                    class="edit-input bg-white/80 border border-[#3498DB]/20 rounded-xl text-[#2C3E50] p-3"
+                    placeholder="Enter your location"
+                  />
+                  }
+                </div>
+              </div>
+            </div>
+
+            <div class="profile-actions">
+              <div class="domain-badge mb-4">
+                <div
+                  class="bg-gradient-to-r from-[#3498DB] to-[#6C5CE7] text-white px-4 py-2 rounded-full text-sm font-semibold shadow-lg"
+                >
+                  <span class="flex items-center gap-2">
+                    {{ profile.domain || "General" }}
+                  </span>
+                </div>
+              </div>
+
+              <div class="profile-buttons flex flex-col gap-3">
+                <button
+                  class="bg-gradient-to-r hover:shadow-2xl hover:shadow-[#3498DB]/25 text-white px-6 py-3 rounded-xl font-semibold transition-all duration-300 transform hover:scale-105"
+                  [class]="
+                    isProfileEditing
+                      ? 'from-[#22C55E] to-[#16A34A]'
+                      : 'from-[#3498DB] to-[#6C5CE7]'
+                  "
+                  (click)="
+                    isProfileEditing ? saveProfile() : toggleProfileEditing()
+                  "
+                >
+                  <span class="flex items-center justify-center gap-2">
+                    {{ isProfileEditing ? "Save Profile" : "Edit Profile" }}
+                  </span>
+                </button>
+                <button
+                  class="bg-gradient-to-r from-[#3498DB] to-[#6C5CE7] hover:from-[#2980B9] hover:to-[#5A4FCF] text-white px-6 py-3 rounded-xl font-semibold transition-all duration-300 hover:shadow-2xl hover:shadow-[#3498DB]/25 transform hover:scale-105"
+                  (click)="navigateToParseResume()"
+                >
+                  <span class="flex items-center justify-center gap-2">
+                    <span>📄</span>
+                    Update Resume
+                  </span>
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <div class="social-links mt-6">
+            <!-- View mode -->
+            @if (!isProfileEditing && profile.githubUrl) {
+            <a
+              [href]="profile.githubUrl"
+              target="_blank"
+              class="social-btn block text-center bg-white/90 hover:bg-[#F8F9FA] border border-[#3498DB]/30 hover:border-[#3498DB]/60 text-[#2C3E50] px-6 py-2 rounded-lg font-medium transition-all duration-300 shadow-sm"
+            >
+              GitHub
+            </a>
+            } @if (!isProfileEditing && profile.linkedinUrl) {
+            <a
+              [href]="profile.linkedinUrl"
+              target="_blank"
+              class="social-btn block text-center bg-white/90 hover:bg-[#F8F9FA] border border-[#3498DB]/30 hover:border-[#3498DB]/60 text-[#2C3E50] px-6 py-2 rounded-lg font-medium transition-all duration-300 shadow-sm"
+            >
+              LinkedIn
+            </a>
+            } @if (!isProfileEditing && profile.portfolioUrl) {
+            <a
+              [href]="profile.portfolioUrl"
+              target="_blank"
+              class="social-btn block text-center bg-white/90 hover:bg-[#F8F9FA] border border-[#3498DB]/30 hover:border-[#3498DB]/60 text-[#2C3E50] px-6 py-2 rounded-lg font-medium transition-all duration-300 shadow-sm"
+            >
+              Portfolio
+            </a>
+            }
+
+            <!-- Edit mode -->
+            @if (isProfileEditing) {
+            <div class="social-links-edit grid grid-cols-1 gap-4">
+              <div class="social-input-group">
+                <label class="block text-[#2C3E50] font-medium mb-2"
+                  >GitHub URL:</label
+                >
+                <input
+                  pInputText
+                  [(ngModel)]="profile.githubUrl"
+                  placeholder="https://github.com/username"
+                  class="w-full bg-white/90 border border-[#3498DB]/30 rounded-lg text-[#2C3E50] p-3 focus:outline-none focus:border-[#3498DB] transition-all"
+                />
+              </div>
+              <div class="social-input-group">
+                <label class="block text-[#2C3E50] font-medium mb-2"
+                  >LinkedIn URL:</label
+                >
+                <input
+                  pInputText
+                  [(ngModel)]="profile.linkedinUrl"
+                  placeholder="https://linkedin.com/in/username"
+                  class="w-full bg-white/90 border border-[#3498DB]/30 rounded-lg text-[#2C3E50] p-3 focus:outline-none focus:border-[#3498DB] transition-all"
+                />
+              </div>
+              <div class="social-input-group">
+                <label class="block text-[#2C3E50] font-medium mb-2"
+                  >Portfolio URL:</label
+                >
+                <input
+                  pInputText
+                  [(ngModel)]="profile.portfolioUrl"
+                  placeholder="https://your-portfolio.com"
+                  class="w-full bg-white/90 border border-[#3498DB]/30 rounded-lg text-[#2C3E50] p-3 focus:outline-none focus:border-[#3498DB] transition-all"
+                />
+              </div>
+            </div>
+            }
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Charts Section -->
+    <div
+      class="charts-section grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-8 mb-8"
+    >
+      <div class="chart-container">
+        <div class="relative group">
+          <div
+            class="absolute -inset-1 bg-gradient-to-br from-[#3498DB]/20 to-[#6C5CE7]/20 rounded-2xl blur-xl opacity-50"
+          ></div>
+          <div
+            class="relative bg-white/90 backdrop-blur-xl rounded-2xl p-6 md:p-8 border border-[#3498DB]/20 hover:border-[#3498DB]/40 shadow-lg h-full"
+          >
+            <div class="chart-header flex justify-between items-center mb-6">
+              <h3 class="text-2xl font-bold text-[#2C3E50]">Domain Analysis</h3>
+              <span class="text-2xl">📊</span>
+            </div>
+            <div class="chart-content">
+              @if (domainChartData) {
+              <p-chart
+                type="pie"
+                [data]="domainChartData"
+                [options]="domainChartOptions"
+                class="w-full"
+              >
+              </p-chart>
+              }
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="chart-container">
+        <div class="relative group">
+          <div
+            class="absolute -inset-1 bg-gradient-to-br from-[#3498DB]/20 to-[#6C5CE7]/20 rounded-2xl blur-xl opacity-50"
+          ></div>
+          <div
+            class="relative bg-white/90 backdrop-blur-xl rounded-2xl p-6 md:p-8 border border-[#3498DB]/20 hover:border-[#3498DB]/40 shadow-lg h-full"
+          >
+            <div class="chart-header flex justify-between items-center mb-6">
+              <h3 class="text-2xl font-bold text-[#2C3E50]">
+                Performance Metrics
+              </h3>
+              <span class="text-2xl">⚡</span>
+            </div>
+            <div class="chart-content">
+              @if (atsChartData) {
+              <p-chart
+                type="polarArea"
+                [data]="atsChartData"
+                [options]="atsChartOptions"
+                class="w-full"
+              >
+              </p-chart>
+              }
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Skills Section -->
+    <div class="skills-section mb-8">
+      <div class="relative group">
+        <div
+          class="absolute -inset-1 bg-gradient-to-br from-[#3498DB]/20 to-[#6C5CE7]/20 rounded-2xl blur-xl opacity-50"
+        ></div>
+        <div
+          class="relative bg-white/90 backdrop-blur-xl rounded-2xl p-6 md:p-8 border border-[#3498DB]/20 hover:border-[#3498DB]/40 shadow-lg"
+        >
+          <div class="section-header flex justify-between items-center mb-6">
+            <h3 class="text-2xl font-bold text-[#2C3E50]">Skills</h3>
+            <button
+              class="bg-gradient-to-r from-[#3498DB] to-[#6C5CE7] hover:from-[#2980B9] hover:to-[#5A4FCF] text-white px-6 py-3 rounded-xl font-semibold transition-all duration-300 hover:shadow-2xl hover:shadow-[#3498DB]/25 transform hover:scale-105"
+              (click)="showAddSkillDialog = true"
+            >
+              <span class="flex items-center gap-2">
+                <span>➕</span>
+                Add Skill
+              </span>
+            </button>
+          </div>
+
+          <div
+            class="skills-grid grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4"
+          >
+            @for (skill of skills; track skill.id) {
+            <div
+              class="skill-item bg-gradient-to-r from-[#3498DB]/5 to-[#6C5CE7]/5 border border-[#3498DB]/20 rounded-xl p-4 hover:bg-[#3498DB]/10 hover:border-[#3498DB]/40 transition-all duration-300"
+            >
+              <div class="skill-content">
+                <div class="skill-info flex-1">
+                  <h4
+                    class="skill-name text-lg font-semibold text-[#2C3E50] mb-1"
+                  >
+                    {{ skill.name }}
+                  </h4>
+                  <p class="skill-category text-sm text-[#6C757D]">
+                    {{ skill.category }}
+                  </p>
+                </div>
+                <div class="skill-level mt-2">
+                  <span
+                    class="inline-block px-3 py-1 rounded-full text-xs font-semibold text-white"
+                    [style]="{ 'background-color': getLevelColor(skill.level) }"
+                  >
+                    {{ skill.level }}
+                  </span>
+                </div>
+              </div>
+            </div>
+            } @if (skills.length === 0) {
+            <div class="col-span-full text-center text-[#6C757D] py-12">
+              <p class="text-xl">
+                No skills added yet. Click "Add Skill" to get started!
+              </p>
+            </div>
+            }
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Certifications and Achievements Section -->
+    <div
+      class="certifications-section grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-8 mb-8"
+    >
+      <div class="certifications-container">
+        <div class="relative group">
+          <div
+            class="absolute -inset-1 bg-gradient-to-br from-[#3498DB]/20 to-[#6C5CE7]/20 rounded-2xl blur-xl opacity-50"
+          ></div>
+          <div
+            class="relative bg-white/90 backdrop-blur-xl rounded-2xl p-6 md:p-8 border border-[#3498DB]/20 hover:border-[#3498DB]/40 shadow-lg h-full"
+          >
+            <div class="section-header flex justify-between items-center mb-6">
+              <h3 class="text-2xl font-bold text-[#2C3E50]">Certifications</h3>
+              <button
+                class="bg-gradient-to-r from-[#3498DB] to-[#6C5CE7] hover:from-[#2980B9] hover:to-[#5A4FCF] text-white px-6 py-3 rounded-xl font-semibold transition-all duration-300 hover:shadow-2xl hover:shadow-[#3498DB]/25 transform hover:scale-105"
+                (click)="showAddCertificationDialog = true"
+              >
+                <span class="flex items-center gap-2">
+                  <span>➕</span>
+                  Add Certification
+                </span>
+              </button>
+            </div>
+
+            <div class="certifications-list">
+              @for (cert of certifications; track cert.id) {
+              <div
+                class="certification-item bg-gradient-to-r from-[#3498DB]/5 to-[#6C5CE7]/5 border border-[#3498DB]/20 rounded-xl p-4 mb-4 hover:bg-[#3498DB]/10 hover:border-[#3498DB]/40 transition-all duration-300"
+              >
+                <div class="certification-content">
+                  <div class="certification-info">
+                    <h4
+                      class="certification-name text-lg font-semibold text-[#2C3E50] mb-1"
+                    >
+                      {{ cert.name }}
+                    </h4>
+                    <p
+                      class="certification-issuer text-[#3498DB] font-medium mb-1"
+                    >
+                      {{ cert.issuer }}
+                    </p>
+                    <p class="certification-date text-sm text-[#6C757D] mb-2">
+                      {{ formatDate(cert.date) }}
+                    </p>
+                    <p class="certification-description text-[#2C3E50]">
+                      {{ cert.description }}
+                    </p>
+                  </div>
+                </div>
+              </div>
+              }
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="achievements-container">
+        <div class="relative group">
+          <div
+            class="absolute -inset-1 bg-gradient-to-br from-[#3498DB]/20 to-[#6C5CE7]/20 rounded-2xl blur-xl opacity-50"
+          ></div>
+          <div
+            class="relative bg-white/90 backdrop-blur-xl rounded-2xl p-6 md:p-8 border border-[#3498DB]/20 hover:border-[#3498DB]/40 shadow-lg h-full"
+          >
+            <div class="section-header flex justify-between items-center mb-6">
+              <h3 class="text-2xl font-bold text-[#2C3E50]">Achievements</h3>
+              <button
+                class="bg-gradient-to-r from-[#3498DB] to-[#6C5CE7] hover:from-[#2980B9] hover:to-[#5A4FCF] text-white px-6 py-3 rounded-xl font-semibold transition-all duration-300 hover:shadow-2xl hover:shadow-[#3498DB]/25 transform hover:scale-105"
+                (click)="showAddAchievementDialog = true"
+              >
+                <span class="flex items-center gap-2">
+                  <span>➕</span>
+                  Add Achievement
+                </span>
+              </button>
+            </div>
+
+            <div class="achievements-list">
+              @for (achievement of achievements; track achievement.id) {
+              <div
+                class="achievement-item bg-gradient-to-r from-[#3498DB]/5 to-[#6C5CE7]/5 border border-[#3498DB]/20 rounded-xl p-4 mb-4 hover:bg-[#3498DB]/10 hover:border-[#3498DB]/40 transition-all duration-300"
+              >
+                <div class="achievement-content">
+                  <div class="achievement-info">
+                    <h4
+                      class="achievement-title text-lg font-semibold text-[#2C3E50] mb-1"
+                    >
+                      {{ achievement.title }}
+                    </h4>
+                    <p class="achievement-date text-sm text-[#6C757D] mb-2">
+                      {{ formatDate(achievement.date) }}
+                    </p>
+                    <p class="achievement-description text-[#2C3E50]">
+                      {{ achievement.description }}
+                    </p>
+                  </div>
+                </div>
+              </div>
+              }
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Add Skill Dialog -->
+  <p-dialog
+    header="Add New Skill"
+    [(visible)]="showAddSkillDialog"
+    [modal]="true"
+    [style]="{ width: '600px', 'max-width': '90vw' }"
+    styleClass="enhanced-dialog"
+    class="add-dialog"
+  >
+    <div class="dialog-content">
+      <div class="form-group">
+        <label>Skill Name</label>
+        <input
+          pInputText
+          [(ngModel)]="newSkill.name"
+          placeholder="e.g., JavaScript, Python, React"
+        />
+      </div>
+      <div class="form-group">
+        <label>Category</label>
+        <input
+          pInputText
+          [(ngModel)]="newSkill.category"
+          placeholder="e.g., Programming Languages, Frameworks, Tools"
+        />
+      </div>
+      <div class="form-group">
+        <label>Proficiency Level</label>
+        <select [(ngModel)]="newSkill.level">
+          <option value="">Select your proficiency level</option>
+          <option value="Beginner">Beginner - Just starting out</option>
+          <option value="Intermediate">
+            Intermediate - Comfortable with basics
+          </option>
+          <option value="Advanced">Advanced - Highly proficient</option>
+          <option value="Expert">Expert - Master level</option>
+        </select>
+      </div>
+    </div>
+    <ng-template pTemplate="footer">
+      <div class="flex gap-3 justify-end">
+        <p-button
+          label="Cancel"
+          icon="pi pi-times"
+          (onClick)="showAddSkillDialog = false"
+          severity="secondary"
+          class="px-6 py-2"
+        >
+        </p-button>
+        <p-button
+          label="Add Skill"
+          icon="pi pi-check"
+          (onClick)="addSkill()"
+          severity="success"
+          class="px-6 py-2"
+        >
+        </p-button>
+      </div>
+    </ng-template>
+  </p-dialog>
+
+  <!-- Add Certification Dialog -->
+  <p-dialog
+    header="Add New Certification"
+    [(visible)]="showAddCertificationDialog"
+    [modal]="true"
+    [style]="{ width: '600px', 'max-width': '90vw' }"
+    styleClass="enhanced-dialog"
+    class="add-dialog"
+  >
+    <div class="dialog-content">
+      <div class="form-group">
+        <label>Certification Name</label>
+        <input
+          pInputText
+          [(ngModel)]="newCertification.name"
+          placeholder="e.g., AWS Certified Solutions Architect, Google Cloud Professional"
+        />
+      </div>
+      <div class="form-group">
+        <label>Issuing Organization</label>
+        <input
+          pInputText
+          [(ngModel)]="newCertification.issuer"
+          placeholder="e.g., Amazon Web Services, Google, Microsoft"
+        />
+      </div>
+      <div class="form-group">
+        <label>Certification Date</label>
+        <input pInputText type="date" [(ngModel)]="newCertification.date" />
+      </div>
+      <div class="form-group">
+        <label>Description</label>
+        <textarea
+          pInputTextarea
+          [(ngModel)]="newCertification.description"
+          rows="4"
+          placeholder="Brief description of the certification and its significance"
+        >
+        </textarea>
+      </div>
+    </div>
+    <ng-template pTemplate="footer">
+      <div class="flex gap-3 justify-end">
+        <p-button
+          label="Cancel"
+          icon="pi pi-times"
+          (onClick)="showAddCertificationDialog = false"
+          severity="secondary"
+          class="px-6 py-2"
+        >
+        </p-button>
+        <p-button
+          label="Add Certification"
+          icon="pi pi-check"
+          (onClick)="addCertification()"
+          severity="success"
+          class="px-6 py-2"
+        >
+        </p-button>
+      </div>
+    </ng-template>
+  </p-dialog>
+
+  <!-- Add Achievement Dialog -->
+  <p-dialog
+    header="Add New Achievement"
+    [(visible)]="showAddAchievementDialog"
+    [modal]="true"
+    [style]="{ width: '600px', 'max-width': '90vw' }"
+    styleClass="enhanced-dialog"
+    class="add-dialog"
+  >
+    <div class="dialog-content">
+      <div class="form-group">
+        <label>Achievement Title</label>
+        <input
+          pInputText
+          [(ngModel)]="newAchievement.title"
+          placeholder="e.g., Best Developer Award, Hackathon Winner, Project Lead"
+        />
+      </div>
+      <div class="form-group">
+        <label>Achievement Date</label>
+        <input pInputText type="date" [(ngModel)]="newAchievement.date" />
+      </div>
+      <div class="form-group">
+        <label>Description</label>
+        <textarea
+          pInputTextarea
+          [(ngModel)]="newAchievement.description"
+          rows="4"
+          placeholder="Describe your achievement and its impact"
+        >
+        </textarea>
+      </div>
+    </div>
+    <ng-template pTemplate="footer">
+      <div class="flex gap-3 justify-end">
+        <p-button
+          label="Cancel"
+          icon="pi pi-times"
+          (onClick)="showAddAchievementDialog = false"
+          severity="secondary"
+          class="px-6 py-2"
+        >
+        </p-button>
+        <p-button
+          label="Add Achievement"
+          icon="pi pi-check"
+          (onClick)="addAchievement()"
+          severity="success"
+          class="px-6 py-2"
+        >
+        </p-button>
+      </div>
+    </ng-template>
+  </p-dialog>
+</div>

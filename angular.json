@@ -3,7 +3,7 @@
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
-    "CareerNexa-frontend": {
+    "PrepWise-frontend": {
       "projectType": "application",
       "schematics": {},
       "root": "",
@@ -52,10 +52,10 @@
           "builder": "@angular/build:dev-server",
           "configurations": {
             "production": {
-              "buildTarget": "CareerNexa-frontend:build:production"
+              "buildTarget": "PrepWise-frontend:build:production"
             },
             "development": {
-              "buildTarget": "CareerNexa-frontend:build:development"
+              "buildTarget": "PrepWise-frontend:build:development"
             }
           },
           "defaultConfiguration": "development"

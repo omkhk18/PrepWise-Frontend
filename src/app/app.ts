@@ -12,5 +12,5 @@ import { ToastComponent } from "./shared/toast/toast.component";
 })
 export class App {
   /** Reactive application title used where needed across the app. */
-  protected readonly title = signal('CareerNexa-frontend');
+  protected readonly title = signal('PrepWise-frontend');
 }
